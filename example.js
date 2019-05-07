@@ -34,25 +34,39 @@ let H = config[0][4];
 for (let i = 0; i < data.length; i++) { 
   let x=data[i][0];
   let y=data[i][2];
+  let weight = i < B ? 0 : 1;
   console.log('data[i]: ',data[i]);
-  data[i] = {x, y, empty: false, weight: i < B ? 0: 1};
-  //which quadrant does it belong to?
-  //top-left quadrant
- //  if(data[i].x <= N && data[i].y <= N){
-	// leftSideWeight++;
-	// frontSideWeight++;	  	
- //  } /*top-left quadrant*/ else if(data[i].x <= N && data[i].y <= N){
-
- //  }else if(){}leftSideWeight = 2
- //  else if(){
- //  	backSideWeight = 2
- //  }
- //  rightSideWeight = 2
- //  frontSideWeight = 0
-
+  data[i] = {x, y, weight, empty: false};
+  //is it a hunter?
+  if(i >= B){
+	  //which quadrant does it belong to?
+	  //top-left quadrant
+	  if(x <= N/2 && y <= N/2){
+		leftSideWeight++;
+		frontSideWeight++;	  	
+	  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
+	  	leftSideWeight++;
+	  	backSideWeight++;
+	  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
+	  	rightSideWeight++;
+	  	frontSideWeight++;	
+	  } else /*bottom-right quadrant*/ {
+	    rightSideWeight++;
+	  	backSideWeight++;
+	  }
+  }
+  	console.log('leftSideWeight: ',leftSideWeight);
+	console.log('rightSideWeight: ',rightSideWeight);
+	console.log('frontSideWeight: ',frontSideWeight);
+	console.log('backSideWeight: ',backSideWeight);
 }
 
 console.log('data after segmentation:',data);
+
+console.log('leftSideWeight: ',leftSideWeight);
+console.log('rightSideWeight: ',rightSideWeight);
+console.log('frontSideWeight: ',frontSideWeight);
+console.log('backSideWeight: ',backSideWeight);
 //An array of objects:
 //[{x: 1, y: 1, empty: true/false, weight: 0/1}, {...}, ...]
 
