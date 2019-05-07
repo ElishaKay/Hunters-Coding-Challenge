@@ -1,12 +1,22 @@
 const fs = require('fs'),
-    path = require('path'),    
-    resultsFilePath = path.join(__dirname, 'results.txt');
+    path = require('path'),
+    testCasesFilePath = path.join(__dirname, 'task-1.txt');
+    resultsFilePath = path.join(__dirname, 'results.txt')
 
 let leftSideWeight = 0;
 let rightSideWeight = 0;
 let frontSideWeight = 0;
 let backSideWeight = 0;
 let balanceStatus = [];
+
+fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
+    if (!err) {
+        console.log('received data: ' + data);
+        
+    } else {
+        console.log(err);
+    }
+});
 
 let string = `4 4 4
 1 1
