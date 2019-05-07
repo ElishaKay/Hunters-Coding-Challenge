@@ -96,16 +96,12 @@ const findHeaviestSection = () => {
 	let status = [];
 
 	//check left right-balance
-	if(leftRightBalance === 0){
-		status.push({heavierSide: 'none', note: 'left-right weight is perfectly balanced'});
-	} else {
+	if(leftRightBalance != 0){
 		status.push({heavierSide: leftRightBalance > 0 ? 'left side' : 'right side',
 					 byHowMany: Math.abs(leftRightBalance)});
-	}
+	} 
 
-	if(frontBackBalance === 0){
-		status.push({heavierSide: 'none', note: 'front-back weight is perfectly balanced'});
-	} else {
+	if(frontBackBalance != 0){
 		status.push({heavierSide: frontBackBalance > 0 ? 'front side' : 'back side',
 					 byHowMany: Math.abs(frontBackBalance)});
 	}
