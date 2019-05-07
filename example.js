@@ -1,6 +1,6 @@
 const fs = require('fs'),
     path = require('path'),    
-    filePath = path.join(__dirname, 'results.txt');
+    resultsFilePath = path.join(__dirname, 'results.txt');
 
 let leftSideWeight = 0;
 let rightSideWeight = 0;
@@ -150,3 +150,15 @@ updateRelevantSeats = (seat, section) => {
 
 removeLoad(balanceStatus[0].heavierSide);
 
+logResults = (grid) => {
+	let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
+	fs.writeFile(resultsFilePath, testResult, function(err) {
+	    if(err) {
+	        return console.log(err);
+	    }
+
+	    console.log("The file was saved!");
+	}); 
+}
+
+logResults(grid);
