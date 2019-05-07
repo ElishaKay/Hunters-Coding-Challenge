@@ -31,6 +31,15 @@ let N = config[0][0];
 let B = config[0][2];
 let H = config[0][4];
 
+// create 4-by-4 array of objects
+let grid = [];
+for (let x = 1; x <= N; x++) { 
+	for (let y = 1; y <= N; y++) { 
+ 		grid.push({x, y, empty: true, weight:0});
+	}
+}
+console.log('grid: ',grid)
+
 for (let i = 0; i < data.length; i++) { 
   let x=data[i][0];
   let y=data[i][2];
@@ -55,18 +64,14 @@ for (let i = 0; i < data.length; i++) {
 	  	backSideWeight++;
 	  }
   }
-  	console.log('leftSideWeight: ',leftSideWeight);
-	console.log('rightSideWeight: ',rightSideWeight);
-	console.log('frontSideWeight: ',frontSideWeight);
-	console.log('backSideWeight: ',backSideWeight);
 }
 
 console.log('data after segmentation:',data);
 
-console.log('leftSideWeight: ',leftSideWeight);
-console.log('rightSideWeight: ',rightSideWeight);
-console.log('frontSideWeight: ',frontSideWeight);
-console.log('backSideWeight: ',backSideWeight);
+// console.log('leftSideWeight: ',leftSideWeight);
+// console.log('rightSideWeight: ',rightSideWeight);
+// console.log('frontSideWeight: ',frontSideWeight);
+// console.log('backSideWeight: ',backSideWeight);
 //An array of objects:
 //[{x: 1, y: 1, empty: true/false, weight: 0/1}, {...}, ...]
 
