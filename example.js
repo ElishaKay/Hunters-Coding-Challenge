@@ -3,7 +3,7 @@ let leftSideWeight = 0;
 let rightSideWeight = 0;
 let frontSideWeight = 0;
 let backSideWeight = 0;
-
+let heaviestSection = '';
 
 let string = `4 4 4
 1 1
@@ -92,3 +92,28 @@ const weightCalc = () => {
 
 weightCalc();
 //compare filled spaces with grid.
+
+const findHeaviestSection = () => {
+	let leftRightBalance = leftSideWeight - rightSideWeight;
+	let frontBackBalance = frontSideWeight - backSideWeight;
+	let balanceStatus = [];
+
+	//check left right-balance
+	if(leftRightBalance === 0){
+		balanceStatus.push("left-right weight is perfectly balanced");
+	} else {
+		balanceStatus.push(leftRightBalance > 0 ? 'left side is too heavy' : 'right side is too heavy');
+	}
+
+	if(frontBackBalance === 0){
+		balanceStatus.push("front-back weight is perfectly balanced");
+	} else {
+		balanceStatus.push(frontBackBalance > 0 ? 'front side is too heavy' : 'back side is too heavy');
+	}
+
+	return balanceStatus;
+}
+
+heaviestSection = findHeaviestSection();
+
+console.log('heaviestSection: ',heaviestSection)
