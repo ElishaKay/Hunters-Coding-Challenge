@@ -28,7 +28,7 @@ let H = config[0][4];
 let grid = [];
 for (let x = 1; x <= N; x++) { 
 	for (let y = 1; y <= N; y++) { 
- 		grid.push({x, y, weight:0, empty: true});
+ 		grid.push({x, y, weight:0, empty: true, glued: false});
 	}
 }
 
@@ -37,7 +37,7 @@ for (let i = 0; i < data.length; i++) {
   let x=data[i][0];
   let y=data[i][2];
   let weight = i < B ? 0 : 1;
-  data[i] = {x, y, weight, empty: false};
+  data[i] = {x, y, weight, empty: false, glued: true};
 
   //replace the relevant element within the grid:
   const seatIndex = grid.findIndex((seat) => seat.x == x && seat.y == y)
@@ -88,7 +88,6 @@ const weightCalc = () => {
 	console.log('rightSideWeight: ',rightSideWeight);
 	console.log('frontSideWeight: ',frontSideWeight);
 	console.log('backSideWeight: ',backSideWeight);
-
 }
 
 weightCalc();

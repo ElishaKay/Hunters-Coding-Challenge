@@ -18,6 +18,8 @@ H is the amount of already seated treasure hunters.
 -Continues with B lines containing two integers -“XY”, marking theposition of the box on the magic carpet.
 -Ends with H lines containing two integers -“XY”, marking the position of the hunteron the magic carpet.
 
+rules:
+Already seated hunters can’t be moved around.
 -------------
 
 Output:
