@@ -22,6 +22,7 @@ H is the amount of already seated treasure hunters.
 
 First set (task-1.txt)
 - Includes 200 test cases.
+
 - The length and width of the magic carpet (N) is guaranteed to be an even number between 2 and 100000.
 
 
