@@ -66,9 +66,24 @@ for (let i = 0; i < data.length; i++) {
 }
 
 // console.log('data after segmentation:',data);
-console.log('updated grid:',grid);
+console.log('grid before adding hunters to empty seats:',grid);
 
-//do we need to balance out the magic carpet?
+console.log('leftSideWeight: ',leftSideWeight);
+console.log('rightSideWeight: ',rightSideWeight);
+console.log('frontSideWeight: ',frontSideWeight);
+console.log('backSideWeight: ',backSideWeight);
+
+// Step 1: map through the grid object
+// and put hunters in all the empty seats
+grid = grid.map((seat)=> {
+	if(seat.empty){
+		seat.empty =  false; 
+	    seat.weight = 1;
+	} 
+	return seat;
+})
+
+console.log('grid after empty seats have been taken by hunters:',grid);
 //compare filled spaces with grid.
 
 

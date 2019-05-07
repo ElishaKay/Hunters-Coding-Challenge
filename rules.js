@@ -16,7 +16,20 @@ B is the amount of already placed boxes,
 
 H is the amount of already seated treasure hunters.
 -Continues with B lines containing two integers -“XY”, marking theposition of the box on the magic carpet.
--Ends with Hlines containing two integers -“XY”, marking the position of the hunteron the magic carpet.
+-Ends with H lines containing two integers -“XY”, marking the position of the hunteron the magic carpet.
+
+-------------
+
+Output:
+
+your goal is to find the maximum number of additionaltreasure hunters that can be seated 
+while ensuring that in the end the magic carpet is stable.
+
+For each test case, output one line containing “Case #C: A”, 
+where C is the test case number (starting from 1) 
+and A is the maximum number of additional treasure hunters that can be seated 
+while ensuring the magic carpet is stable. 
+If it is not possible to balance the magic carpet, A should be set to -1.
 
 --------------------------
 
