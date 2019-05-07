@@ -88,4 +88,11 @@ Maybe an array of objects:
 
 [{x: 1, y: 1, empty: true/false, weight: 0/1}, {...}, ...]
 
+---------------------
+
+Ideas:
+
+Create for loop
+
+i<N*N
 
