@@ -16,8 +16,12 @@ let arr = string.split("\n");
 console.log('arr',arr);
 
 let config = arr.slice(0,1);
-arr = arr.slice(1);
+data = arr.slice(1);
 
-console.log('arr after slice',arr);
+console.log('data after slice',data);
 console.log('config',config)
+
+for (let i = 0; i < data.length; i++) { 
+  console.log('data[i]: ',data[i])
+}
 
