@@ -44,9 +44,6 @@ for (let i = 0; i < data.length; i++) {
   grid[seatIndex] = data[i];
 }
 
-// console.log('data after segmentation:',data);
-console.log('grid before adding hunters to empty seats:',grid);
-
 // Step 1: map through the grid object
 // and put hunters in all the empty seats
 grid = grid.map((seat)=> {
@@ -100,14 +97,14 @@ const findHeaviestSection = () => {
 
 	//check left right-balance
 	if(leftRightBalance === 0){
-		status.push({heavierSide: 'none', note:"left-right weight is perfectly balanced"});
+		status.push({heavierSide: 'none', note: 'left-right weight is perfectly balanced'});
 	} else {
 		status.push({heavierSide: leftRightBalance > 0 ? 'left side' : 'right side',
 					 byHowMany: Math.abs(leftRightBalance)});
 	}
 
 	if(frontBackBalance === 0){
-		status.push({heavierSide: 'none', note: "front-back weight is perfectly balanced"});
+		status.push({heavierSide: 'none', note: 'front-back weight is perfectly balanced'});
 	} else {
 		status.push({heavierSide: frontBackBalance > 0 ? 'front side' : 'back side',
 					 byHowMany: Math.abs(frontBackBalance)});
@@ -119,3 +116,7 @@ const findHeaviestSection = () => {
 balanceStatus = findHeaviestSection();
 
 console.log('balanceStatus: ',balanceStatus)
+
+// if(){
+
+// }
