@@ -59,6 +59,11 @@ console.log('grid after empty seats have been taken by hunters:',grid);
 
 //function to calculate weight by quadrants
 const weightCalc = () => {
+	//reset weight vars
+	leftSideWeight = 0;
+	rightSideWeight = 0;
+	frontSideWeight = 0;
+	backSideWeight = 0;
 	// calculate the weight balance
 	for (let i = 0; i < grid.length; i++) { 
 		let {weight, x, y} = grid[i]; 
@@ -115,42 +120,22 @@ console.log('balanceStatus: ',balanceStatus)
 
 const removeLoad = (section) => {
 	if(balanceStatus[0].byHowMany){
-		if(section='left side'){
-			grid = grid.map((seat)=> {
-				if(!seat.glued && seat.x <= N/2){
-					seat.empty =  true; 
-				    seat.weight = 0;
-				} 
-				return seat;
-			});
-		} else if (section='right side') {
-			grid = grid.map((seat)=> {
-				if(!seat.glued && seat.x ){
-					seat.empty =  true; 
-				    seat.weight = 0;
-				} 
-				return seat;
-			});
-		} else if (section='front side'){
-			grid = grid.map((seat)=> {
-				if(!seat.glued && seat.x ){
-					seat.empty =  true; 
-				    seat.weight = 0;
-				} 
-				return seat;
-			});
-		} else if (section='back side'){
-			grid = grid.map((seat)=> {
-				if(!seat.glued && seat.x ){
-					seat.empty =  true; 
-				    seat.weight = 0;
-				} 
-				return seat;
-			});
-		}
-	}	
+		if(section='back side'){
+			for (let i = 0; i < balanceStatus[0].byHowMany;) {
+				const seatIndex = grid.findIndex((seat) => !seat.glued && seat.y > N/2 && seat.weight > 0)
+				console.log('ran hunter removal process on: ', grid[seatIndex]);
+ 				if(seatIndex){
+ 					grid[seatIndex] = {...grid[seatIndex], empty: true, weight: 0}
+ 					i++;
+ 				}
+			}
+		} 
+	}
+
+	weightCalc();
+	console.log('grid after checking for weight imbalance and removing hunters which cause imbalance:',grid);
 }
 
 
+removeLoad(balanceStatus[0].heavierSide);
 
-console.log('grid after checking for weight imbalance and removing hunters which cause imbalance:',grid);
