@@ -33,7 +33,6 @@ for (let x = 1; x <= N; x++) {
 }
 
 //create array with filled Spaces
-//calculate weight by quadrants
 for (let i = 0; i < data.length; i++) { 
   let x=data[i][0];
   let y=data[i][2];
@@ -43,35 +42,10 @@ for (let i = 0; i < data.length; i++) {
   //replace the relevant element within the grid:
   const seatIndex = grid.findIndex((seat) => seat.x == x && seat.y == y)
   grid[seatIndex] = data[i];
-
-  // calculate the weight balance
-  //is it a hunter?
-  if(i >= B){
-	  //which quadrant does it belong to?
-	  //top-left quadrant
-	  if(x <= N/2 && y <= N/2){
-		leftSideWeight++;
-		frontSideWeight++;	  	
-	  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
-	  	leftSideWeight++;
-	  	backSideWeight++;
-	  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
-	  	rightSideWeight++;
-	  	frontSideWeight++;	
-	  } else /*bottom-right quadrant*/ {
-	    rightSideWeight++;
-	  	backSideWeight++;
-	  }
-  }
 }
 
 // console.log('data after segmentation:',data);
 console.log('grid before adding hunters to empty seats:',grid);
-
-console.log('leftSideWeight: ',leftSideWeight);
-console.log('rightSideWeight: ',rightSideWeight);
-console.log('frontSideWeight: ',frontSideWeight);
-console.log('backSideWeight: ',backSideWeight);
 
 // Step 1: map through the grid object
 // and put hunters in all the empty seats
@@ -86,4 +60,36 @@ grid = grid.map((seat)=> {
 console.log('grid after empty seats have been taken by hunters:',grid);
 //compare filled spaces with grid.
 
+//function to calculate weight by quadrants
+const weightCalc = () => {
+	// calculate the weight balance
+	for (let i = 0; i < grid.length; i++) { 
+		let {weight, x, y} = grid[i]; 
+		if(weight > 0){
+		  //which quadrant does it belong to?
+		  //top-left quadrant
+		  if(x <= N/2 && y <= N/2){
+			leftSideWeight++;
+			frontSideWeight++;	  	
+		  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
+		  	leftSideWeight++;
+		  	backSideWeight++;
+		  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
+		  	rightSideWeight++;
+		  	frontSideWeight++;	
+		  } else /*bottom-right quadrant*/ {
+		    rightSideWeight++;
+		  	backSideWeight++;
+		  }
+		}
+	}
+	
+	console.log('leftSideWeight: ',leftSideWeight);
+	console.log('rightSideWeight: ',rightSideWeight);
+	console.log('frontSideWeight: ',frontSideWeight);
+	console.log('backSideWeight: ',backSideWeight);
 
+}
+
+weightCalc();
+//compare filled spaces with grid.
