@@ -3,7 +3,7 @@ let leftSideWeight = 0;
 let rightSideWeight = 0;
 let frontSideWeight = 0;
 let backSideWeight = 0;
-let heaviestSection = '';
+let balanceStatus = [];
 
 let string = `4 4 4
 1 1
@@ -96,24 +96,26 @@ weightCalc();
 const findHeaviestSection = () => {
 	let leftRightBalance = leftSideWeight - rightSideWeight;
 	let frontBackBalance = frontSideWeight - backSideWeight;
-	let balanceStatus = [];
+	let status = [];
 
 	//check left right-balance
 	if(leftRightBalance === 0){
-		balanceStatus.push("left-right weight is perfectly balanced");
+		status.push({heavierSide: 'none', note:"left-right weight is perfectly balanced"});
 	} else {
-		balanceStatus.push(leftRightBalance > 0 ? 'left side is too heavy' : 'right side is too heavy');
+		status.push({heavierSide: leftRightBalance > 0 ? 'left side' : 'right side',
+					 byHowMany: Math.abs(leftRightBalance)});
 	}
 
 	if(frontBackBalance === 0){
-		balanceStatus.push("front-back weight is perfectly balanced");
+		status.push({heavierSide: 'none', note: "front-back weight is perfectly balanced"});
 	} else {
-		balanceStatus.push(frontBackBalance > 0 ? 'front side is too heavy' : 'back side is too heavy');
+		status.push({heavierSide: frontBackBalance > 0 ? 'front side' : 'back side',
+					 byHowMany: Math.abs(frontBackBalance)});
 	}
 
-	return balanceStatus;
+	return status;
 }
 
-heaviestSection = findHeaviestSection();
+balanceStatus = findHeaviestSection();
 
-console.log('heaviestSection: ',heaviestSection)
+console.log('balanceStatus: ',balanceStatus)
