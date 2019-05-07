@@ -95,7 +95,7 @@ const weightCalc = () => {
 weightCalc();
 //compare filled spaces with grid.
 
-const findHeaviestSection = () => {
+const searchForImbalance = () => {
 	let leftRightBalance = leftSideWeight - rightSideWeight;
 	let frontBackBalance = frontSideWeight - backSideWeight;
 	let status = [];
@@ -114,7 +114,7 @@ const findHeaviestSection = () => {
 	return status;
 }
 
-balanceStatus = findHeaviestSection();
+balanceStatus = searchForImbalance();
 
 console.log('balanceStatus: ',balanceStatus)
 
