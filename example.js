@@ -15,17 +15,10 @@ let string = `4 4 4
 3 4
 4 4`
 
-// console.log('string:',string);
-
 let arr = string.split("\n");
-
-// console.log('arr',arr);
 
 let config = arr.slice(0,1);
 data = arr.slice(1);
-
-// console.log('data after slice',data);
-// console.log('config',config)
 
 let N = config[0][0];
 let B = config[0][2];
@@ -35,17 +28,23 @@ let H = config[0][4];
 let grid = [];
 for (let x = 1; x <= N; x++) { 
 	for (let y = 1; y <= N; y++) { 
- 		grid.push({x, y, empty: true, weight:0});
+ 		grid.push({x, y, weight:0, empty: true});
 	}
 }
-console.log('grid: ',grid)
 
+//create array with filled Spaces
+//calculate weight by quadrants
 for (let i = 0; i < data.length; i++) { 
   let x=data[i][0];
   let y=data[i][2];
   let weight = i < B ? 0 : 1;
-  console.log('data[i]: ',data[i]);
   data[i] = {x, y, weight, empty: false};
+
+  //replace the relevant element within the grid:
+  const seatIndex = grid.findIndex((seat) => seat.x == x && seat.y == y)
+  grid[seatIndex] = data[i];
+
+  // calculate the weight balance
   //is it a hunter?
   if(i >= B){
 	  //which quadrant does it belong to?
@@ -66,12 +65,10 @@ for (let i = 0; i < data.length; i++) {
   }
 }
 
-console.log('data after segmentation:',data);
+// console.log('data after segmentation:',data);
+console.log('updated grid:',grid);
 
-// console.log('leftSideWeight: ',leftSideWeight);
-// console.log('rightSideWeight: ',rightSideWeight);
-// console.log('frontSideWeight: ',frontSideWeight);
-// console.log('backSideWeight: ',backSideWeight);
-//An array of objects:
-//[{x: 1, y: 1, empty: true/false, weight: 0/1}, {...}, ...]
+//do we need to balance out the magic carpet?
+//compare filled spaces with grid.
+
 
