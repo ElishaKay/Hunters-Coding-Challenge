@@ -1,3 +1,6 @@
+const fs = require('fs'),
+    path = require('path'),    
+    filePath = path.join(__dirname, 'results.txt');
 
 let leftSideWeight = 0;
 let rightSideWeight = 0;
@@ -32,7 +35,7 @@ for (let x = 1; x <= N; x++) {
 	}
 }
 
-//create array with filled Spaces
+//create master array with filled Spaces
 for (let i = 0; i < data.length; i++) { 
   let x=data[i][0];
   let y=data[i][2];
@@ -93,7 +96,6 @@ const weightCalc = () => {
 }
 
 weightCalc();
-//compare filled spaces with grid.
 
 const searchForImbalance = () => {
 	let leftRightBalance = leftSideWeight - rightSideWeight;
@@ -119,21 +121,30 @@ balanceStatus = searchForImbalance();
 console.log('balanceStatus: ',balanceStatus)
 
 const removeLoad = (section) => {
-	if(balanceStatus[0].byHowMany){
-		if(section='back side'){
-			for (let i = 0; i < balanceStatus[0].byHowMany;) {
-				const seatIndex = grid.findIndex((seat) => !seat.glued && seat.y > N/2 && seat.weight > 0)
-				console.log('ran hunter removal process on: ', grid[seatIndex]);
- 				if(seatIndex){
- 					grid[seatIndex] = {...grid[seatIndex], empty: true, weight: 0}
- 					i++;
- 				}
-			}
-		} 
+	if(balanceStatus[0].byHowMany){	
+		for (let i = 0; i < balanceStatus[0].byHowMany;) {
+			const seatIndex = grid.findIndex((seat) => !seat.glued && updateRelevantSeats(seat, section) && seat.weight > 0);
+			console.log('ran hunter removal process on: ', grid[seatIndex]);
+				if(seatIndex){
+					grid[seatIndex] = {...grid[seatIndex], empty: true, weight: 0}
+					i++;
+				}
+		}
 	}
 
 	weightCalc();
-	console.log('grid after checking for weight imbalance and removing hunters which cause imbalance:',grid);
+}
+
+updateRelevantSeats = (seat, section) => {
+	if(section==='left side'){
+		return seat.x <= N/2
+	} else if(section==='right side'){
+		return seat.x > N/2
+	} else if(section==='front side'){
+		return seat.y <= N/2
+	} else if(section==='back side'){
+		return seat.y > N/2
+	}
 }
 
 
