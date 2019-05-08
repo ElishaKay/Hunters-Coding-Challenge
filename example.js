@@ -8,8 +8,6 @@ inspect = (note, elem) => {
 	console.log(note, util.inspect(elem, {showHidden: false, depth: null}))
 }
 
-let balanceStatus = [];
-
 fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
     if (!err) {
         parseInput(data);
@@ -18,30 +16,37 @@ fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
     }
 });
 
-
 parseInput=(string)=>{
 	let arr = string.split("\n");
 	let numOfTestCases = arr.slice(0,1);
-
-	// let config = 'NBH'
-
-	// inspect('arr:', arr)
-	inspect('numOfTestCases:', numOfTestCases)
 	data = arr.slice(1);
+	let configs = [];
+	
+	for (let i = 0; configs.length < numOfTestCases;) {
+		data[i] = data[i].split(" ");
+		N = data[i][0];
+		B = data[i][1];
+		H = data[i][2];
+		configs.push({N, B, H})
+		i+=(Number(B)+Number(H)+1);
+	}
 
-	inspect('data:', data)
-
-	N = config[0][0];
-	B = config[0][2];
-	H = config[0][4];
+	for (let i = 0; i<configs.length; i++) {
+		let {N,B,H} = configs[i];
+		calculateMaxHunters(N,B,H);
+	}
 }
+
 
 calculateMaxHunters=(N,B,H)=>{
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H);
 	grid = fillAllEmptySpaces(grid);
 	let weightPerSide = calculateWeightPerSide(grid, N);
-	let balanceReport = searchForImbalance(weightPerSide);
+	let balanceReport = generateBalanceReport(weightPerSide);
+
+	grid = removeLoad(grid, balanceReport, N);
+	logResults(grid);
 }
 
 createEmptyGrid=(N)=>{
@@ -127,33 +132,32 @@ const calculateWeightPerSide = (grid, N) => {
 }
 
 
-const searchForImbalance = (weightPerSide) => {
+const generateBalanceReport = (weightPerSide) => {
+	let balanceReport = [];
 	let {leftSideWeight, rightSideWeight, frontSideWeight, backSideWeight} = weightPerSide;
 	let leftRightBalance = leftSideWeight - rightSideWeight;
 	let frontBackBalance = frontSideWeight - backSideWeight;
 
 	//check left right-balance
 	if(leftRightBalance != 0){
-		status.push({heavierSide: leftRightBalance > 0 ? 'left side' : 'right side',
+		balanceReport.push({heavierSide: leftRightBalance > 0 ? 'left side' : 'right side',
 					 byHowMany: Math.abs(leftRightBalance)});
 	} 
 
 	if(frontBackBalance != 0){
-		status.push({heavierSide: frontBackBalance > 0 ? 'front side' : 'back side',
+		balanceReport.push({heavierSide: frontBackBalance > 0 ? 'front side' : 'back side',
 					 byHowMany: Math.abs(frontBackBalance)});
 	}
 
-
-	removeLoad(balanceStatus.heavierSide);
+	return balanceReport;
 }
 
-console.log('balanceStatus: ',balanceStatus)
 
-const removeLoad = (section) => {
-	if(balanceStatus[0].byHowMany){	
-		for (let i = 0; i < balanceStatus[0].byHowMany;) {
-			const seatIndex = grid.findIndex((seat) => !seat.glued && updateRelevantSeats(seat, section) && seat.weight > 0);
-			console.log('ran hunter removal process on: ', grid[seatIndex]);
+const removeLoad = (grid, balanceReport, N) => {
+	if(balanceReport[0]){	
+		for (let i = 0; i < balanceReport[0].byHowMany;) {
+			const seatIndex = grid.findIndex((seat) => !seat.glued && updateRelevantSeats(seat, balanceReport[0].heavierSide, N) && seat.weight > 0);
+			// console.log('ran hunter removal process on: ', grid[seatIndex]);
 				if(seatIndex){
 					grid[seatIndex] = {...grid[seatIndex], empty: true, weight: 0}
 					i++;
@@ -161,18 +165,18 @@ const removeLoad = (section) => {
 		}
 	}
 
-	weightCalc();
+	return grid;
 }
 
-updateRelevantSeats = (seat, section) => {
+updateRelevantSeats = ({x,y}, section, N) => {
 	if(section==='left side'){
-		return seat.x <= N/2
+		return x <= N/2
 	} else if(section==='right side'){
-		return seat.x > N/2
+		return x > N/2
 	} else if(section==='front side'){
-		return seat.y <= N/2
+		return y <= N/2
 	} else if(section==='back side'){
-		return seat.y > N/2
+		return y > N/2
 	}
 }
 
@@ -180,13 +184,13 @@ updateRelevantSeats = (seat, section) => {
 
 logResults = (grid) => {
 	let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
-	fs.writeFile(resultsFilePath, testResult, function(err) {
-	    if(err) {
-	        return console.log(err);
-	    }
+	console.log('testResult: ',testResult);
+	// fs.writeFile(resultsFilePath, testResult, function(err) {
+	//     if(err) {
+	//         return console.log(err);
+	//     }
 
-	    console.log("The file was saved!");
-	}); 
+	//     console.log("The file was saved!");
+	// }); 
 }
 
-logResults(grid);
