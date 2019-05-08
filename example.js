@@ -40,11 +40,11 @@ parseInput=(string)=>{
 
 
 calculateMaxHunters=(testCaseNumber, config)=>{
-	console.log(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber}`)
+	// console.log(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber}`)
 	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
-	console.log('grid after addDefaultBoxesAndHunters func: ', grid);
+	// console.log('grid after addDefaultBoxesAndHunters func: ', grid);
 
 	grid = fillAllEmptySpaces(grid);
 	
@@ -57,7 +57,6 @@ calculateMaxHunters=(testCaseNumber, config)=>{
 	// console.log('balanceReport: ',balanceReport)
 
 	grid = removeLoad(grid, balanceReport, N);
-	
 
 	logResults(grid, testCaseNumber);
 }
@@ -171,8 +170,8 @@ const removeLoad = (grid, balanceReport, N) => {
 		let filterFunc;
 
 		let heavySides = balanceReport.map(a => a.heavierSide);
-		console.log('heavySides', heavySides);
-		console.log('balanceReport in removeLoad func',balanceReport)
+		// console.log('heavySides', heavySides);
+		// console.log('balanceReport in removeLoad func',balanceReport)
 	
 		/*top-left quadrant*/
 		if(heavySides.includes('left side') && heavySides.includes('front side')) {
@@ -197,27 +196,35 @@ const removeLoad = (grid, balanceReport, N) => {
 		  return prev + cur.byHowMany;
 		}, 0);
 
-		console.log('numToRemove: ',numToRemove)
+		// console.log('numToRemove: ',numToRemove)
+
+		if(numToRemove > grid.filter((seat)=>!seat.glued && seat.weight>0).length){
+			return -1
+		}
 
 		for (let i = 0; i <= numToRemove; i++) {
 		    const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
 			
-
 			if(typeof grid[seatIndex] != 'undefined') {
-				console.log('ran hunter removal process on: ', grid[seatIndex]);
+				// console.log('ran hunter removal process on: ', grid[seatIndex]);
 				grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, empty: true, weight: 0}
 			}
 		}
 	}
-	inspect('grid at the end of removeLoad Function', grid);
+	// inspect('grid at the end of removeLoad Function', grid);
 	return grid;
 }
 
 
 
 logResults = (grid, testCaseNumber) => {
-	let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
-	console.log(`Case #${testCaseNumber}: ${testResult}`);
+	if(grid == -1){
+		console.log(`Case #${testCaseNumber}: `, -1);	
+	} else {
+		let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
+		console.log(`Case #${testCaseNumber}: ${testResult}`);		
+	}
+
 	// fs.writeFile(resultsFilePath, testResult, function(err) {
 	//     if(err) {
 	//         return console.log(err);
