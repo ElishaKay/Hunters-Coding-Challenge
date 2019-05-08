@@ -31,7 +31,7 @@ parseInput=(string)=>{
 		i+=(Number(B)+Number(H)+1);
 	}
 
-	for (let i = 0; i<configs.length; i++) {
+	for (let i = 0; i<1; i++) {
 		let {N,B,H} = configs[i];
 		calculateMaxHunters(i+1, N,B,H);
 	}
@@ -43,7 +43,11 @@ calculateMaxHunters=(testCaseNumber, N,B,H)=>{
 
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H);
+	
+	console.log('grid: ', grid);
 	grid = fillAllEmptySpaces(grid);
+	
+
 	let weightPerSide = calculateWeightPerSide(grid, N);
 	let balanceReport = generateBalanceReport(weightPerSide);
 

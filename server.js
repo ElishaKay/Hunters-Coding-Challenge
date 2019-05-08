@@ -27,13 +27,15 @@ parseInput=(string)=>{
 	inspect('numOfTestCases:', numOfTestCases)
 	
 	for (let i = 0; configs.length < numOfTestCases;) {
+		console.log('data[i]',data[i])
 		data[i] = data[i].split(" ");
 		N = data[i][0];
 		B = data[i][1];
 		H = data[i][2];
-		console.log(N, B, H)
-		configs.push(`${N} ${B} ${H}`)
-		i+=(Number(B)+Number(H)+1);
+		let end = i+Number(B)+Number(H)+1;
+		let coordinates = data.slice(i, end);
+		configs.push({N, B, H, coordinates});
+		i=end;
 		console.log('i=', i)	
 	}
 
