@@ -25,10 +25,12 @@ parseInput=(string)=>{
 	for (let i = 0; configs.length < numOfTestCases;) {
 		data[i] = data[i].split(" ");
 		N = data[i][0];
-		B = data[i][1];
-		H = data[i][2];
-		configs.push({N, B, H})
-		i+=(Number(B)+Number(H)+1);
+		B = Number(data[i][1]);
+		H = Number(data[i][2]);
+		let end = i+B+H+1;
+		let coordinates = data.slice(i+1, end);
+		configs.push({N, B, H, coordinates});
+		i=end;
 	}
 
 	for (let i = 0; i<1; i++) {
