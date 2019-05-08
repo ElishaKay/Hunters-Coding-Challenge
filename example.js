@@ -67,7 +67,7 @@ createEmptyGrid=(N)=>{
 	let grid = [];
 	for (let x = 1; x <= N; x++) { 
 		for (let y = 1; y <= N; y++) { 
-	 		grid.push({x, y, empty: true, glued: false});
+	 		grid.push({x, y, glued: false});
 		}
 	}
 	return grid;
@@ -95,7 +95,7 @@ fillAllEmptySpaces=(grid)=>{
 	// map through the grid object
 	// and put hunters in all the empty seats
 	grid = grid.map((seat)=> {
-		if(seat.empty){
+		if(!seat.glued){
 			seat.empty =  false; 
 		    seat.weight = 1;
 		} 
