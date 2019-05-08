@@ -101,25 +101,46 @@ const calculateWeightPerSide = (grid, N) => {
 		for (let i = 0; i < grid.length; i++) { 
 			let {weight, x, y} = grid[i]; 
 			if(weight > 0){
-			  //which quadrant does it belong to?
-			  if (N%2 == 0){
-			  	  //top-left quadrant
-				  if(x <= N/2 && y <= N/2){
-					leftSideWeight++;
-					frontSideWeight++;	  	
-				  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
-				  	leftSideWeight++;
-				  	backSideWeight++;
-				  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
-				  	rightSideWeight++;
-				  	frontSideWeight++;	
-				  } else /*bottom-right quadrant*/ {
-				    rightSideWeight++;
-				  	backSideWeight++;
-				  }	
-			  } /* else if N is an odd number */else{
-			  	
-			  }
+			  	  //which quadrant does it belong to?
+				  if (N%2 == 0){
+					  	  //top-left quadrant
+						  if(x <= N/2 && y <= N/2){
+							leftSideWeight++;
+							frontSideWeight++;	  	
+						  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
+						  	leftSideWeight++;
+						  	backSideWeight++;
+						  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
+						  	rightSideWeight++;
+						  	frontSideWeight++;	
+						  } else /*bottom-right quadrant*/ {
+						    rightSideWeight++;
+						  	backSideWeight++;
+						  }	
+				  } /* else if N is an odd number */else{
+				  		//top-left quadrant
+						  if(x < N/2 && y < N/2){
+							leftSideWeight++;
+							frontSideWeight++;	  	
+						  } /*bottom-left quadrant*/ else if(x < N/2 && y > (N/2 + 1) ){
+						  	leftSideWeight++;
+						  	backSideWeight++;
+						  } /*top-right quadrant*/ else if(x > (N/2 + 1) && y < N/2){
+						  	rightSideWeight++;
+						  	frontSideWeight++;	
+						  } /*bottom-right quadrant*/ else if(x > (N/2 + 1) && y > (N/2 + 1) ){
+						    rightSideWeight++;
+						  	backSideWeight++;
+						  }	 /*just leftSideWeight*/ else if(x < N/2 && y == Math.round(N/2) ){
+						  	leftSideWeight++;
+						  } /*just frontSideWeight*/ else if(x == Math.round(N/2) && y < N/2 ){
+						  	frontSideWeight++;	
+						  } /*just backSideWeight*/ else if(x == Math.round(N/2) && y > Math.round(N/2) ){
+						  	backSideWeight++;	
+						  } /*just rightSideWeight*/ else if(x > Math.round(N/2) && y == Math.round(N/2) ){
+						  	rightSideWeight++;	
+						  } 
+				  }
 
 			  
 			}
