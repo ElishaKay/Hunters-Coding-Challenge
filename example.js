@@ -33,7 +33,7 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 0; i< configs.length; i++) {
+	for (let i = 130; i< configs.length; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
