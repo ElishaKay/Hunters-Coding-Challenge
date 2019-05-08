@@ -40,19 +40,31 @@ parseInput=(string)=>{
 
 
 calculateMaxHunters=(testCaseNumber, config)=>{
+	console.log(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber}`)
 	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
-	
+	console.log('grid after addDefaultBoxesAndHunters func: ', grid);
+
 	grid = fillAllEmptySpaces(grid);
 	
+	console.log('grid after fillAllEmptySpaces func: ', grid);
 
 	let weightPerSide = calculateWeightPerSide(grid, N);
+	// console.log('weightPerSide: ',weightPerSide)
+
 	let balanceReport = generateBalanceReport(weightPerSide);
+	// console.log('balanceReport: ',balanceReport)
 
 	grid = removeLoad(grid, balanceReport, N);
 	
-	console.log('grid: ', grid);
+	weightPerSide = calculateWeightPerSide(grid, N);
+	balanceReport = generateBalanceReport(weightPerSide);
+
+	if(balanceReport){
+		removeLoad(grid, balanceReport, N);
+	}
+
 	logResults(grid, testCaseNumber);
 }
 
@@ -161,6 +173,7 @@ const generateBalanceReport = (weightPerSide) => {
 
 
 const removeLoad = (grid, balanceReport, N) => {
+	
 	if(balanceReport[0]){	
 		for (let i = 0; i < balanceReport[0].byHowMany;) {
 			const seatIndex = grid.findIndex((seat) => !seat.glued && updateRelevantSeats(seat, balanceReport[0].heavierSide, N) && seat.weight > 0);
@@ -171,7 +184,9 @@ const removeLoad = (grid, balanceReport, N) => {
 				}
 		}
 	}
+	// balanceReport = balanceReport.slice(1)
 
+	// return {grid, balanceReport};
 	return grid;
 }
 
