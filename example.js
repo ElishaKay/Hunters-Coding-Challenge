@@ -33,7 +33,7 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 0; i<1; i++) {
+	for (let i = 0; i< configs.length; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
@@ -44,7 +44,6 @@ calculateMaxHunters=(testCaseNumber, config)=>{
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
 	
-	console.log('grid: ', grid);
 	grid = fillAllEmptySpaces(grid);
 	
 
@@ -52,6 +51,8 @@ calculateMaxHunters=(testCaseNumber, config)=>{
 	let balanceReport = generateBalanceReport(weightPerSide);
 
 	grid = removeLoad(grid, balanceReport, N);
+	
+	console.log('grid: ', grid);
 	logResults(grid, testCaseNumber);
 }
 
@@ -190,7 +191,7 @@ updateRelevantSeats = ({x,y}, section, N) => {
 
 logResults = (grid, testCaseNumber) => {
 	let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
-	console.log(`testResult for ${testCaseNumber}: `,testResult);
+	console.log(`Case #${testCaseNumber}: ${testResult}`);
 	// fs.writeFile(resultsFilePath, testResult, function(err) {
 	//     if(err) {
 	//         return console.log(err);
