@@ -1,3 +1,4 @@
+//stronger dyno
 inspect(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber} where the config is`, config);
 
 
