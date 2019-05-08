@@ -1,7 +1,14 @@
 const fs = require('fs'),
     path = require('path'),
-    testCasesFilePath = path.join(__dirname, 'task-1.txt');
-    resultsFilePath = path.join(__dirname, 'results.txt')
+    util = require('util'),
+    testCasesFilePath = path.join(__dirname, 'task-1.txt'),
+    resultsFilePath = path.join(__dirname, 'results.txt');
+
+inspect = (note, elem) => {
+	console.log(note, util.inspect(elem, {showHidden: false, depth: null}))
+}
+
+
 
 let leftSideWeight = 0;
 let rightSideWeight = 0;
@@ -18,6 +25,8 @@ fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
     }
 });
 
+
+
 let string = `4 4 4
 1 1
 2 1
@@ -31,11 +40,18 @@ let string = `4 4 4
 let arr = string.split("\n");
 
 let config = arr.slice(0,1);
+
+inspect('arr:', arr)
+inspect('config:', config)
 data = arr.slice(1);
+
+inspect('data:', data)
 
 let N = config[0][0];
 let B = config[0][2];
 let H = config[0][4];
+
+
 
 // create 4-by-4 array of objects
 let grid = [];
@@ -67,7 +83,7 @@ grid = grid.map((seat)=> {
 	return seat;
 })
 
-console.log('grid after empty seats have been taken by hunters:',grid);
+inspect('grid after empty seats have been taken by hunters:',grid);
 //compare filled spaces with grid.
 
 //function to calculate weight by quadrants
