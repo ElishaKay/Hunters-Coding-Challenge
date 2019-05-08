@@ -167,6 +167,13 @@ const generateBalanceReport = (weightPerSide) => {
 
 const removeLoad = (grid, balanceReport, N) => {
 	if(balanceReport.length>0){
+		var descendingOrder = balanceReport.sort((a, b) => b.byHowMany - a.byHowMany);
+		let numToRemove = descendingOrder[0].byHowMany;
+		let removableHunters = grid.filter((seat)=>!seat.glued).length;
+		if(numToRemove > removableHunters){
+			return -1
+		}
+
 		let filterFunc;
 
 		let heavySides = balanceReport.map(a => a.heavierSide);
@@ -190,16 +197,6 @@ const removeLoad = (grid, balanceReport, N) => {
 			filterFunc = ({x,y}, N)=> y <= N/2
 		} else if(heavySides.includes('back side')){
 			filterFunc = ({x,y}, N)=> y > N/2
-		}
-
-		let numToRemove = balanceReport.reduce(function(prev, cur) {
-		  return prev + cur.byHowMany;
-		}, 0);
-
-		// console.log('numToRemove: ',numToRemove)
-
-		if(numToRemove > grid.filter((seat)=>!seat.glued && seat.weight>0).length){
-			return -1
 		}
 
 		for (let i = 0; i <= numToRemove; i++) {
