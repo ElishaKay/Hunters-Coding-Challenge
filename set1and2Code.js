@@ -185,8 +185,8 @@ const generateBalanceReport = (weightPerSide) => {
 
 const removeLoad = (grid, balanceReport, N) => {
 	if(balanceReport.length>0){
-		var descendingOrder = balanceReport.sort((a, b) => b.byHowMany - a.byHowMany);
-		let numToRemove = descendingOrder[0].byHowMany;
+		var sortedBalanceReport = balanceReport.sort((a, b) => b.byHowMany - a.byHowMany);
+		let numToRemove = sortedBalanceReport[0].byHowMany;
 		let removableHunters = grid.filter((seat)=>!seat.glued).length;
 		if(numToRemove > removableHunters){
 			return -1
@@ -226,11 +226,13 @@ const removeLoad = (grid, balanceReport, N) => {
 		} /* else if N is an odd number */else{
 			/*top-left quadrant*/
 			if(heavySides.includes('left side') && heavySides.includes('front side')) {
-				filterFunc = ({x,y}, N)=> x < N/2 && y < N/2 	
+					filterFunc = ({x,y}, N)=> x < N/2 && y < N/2	 	
 			} /*bottom-left quadrant*/ else if(heavySides.includes('left side') && heavySides.includes('back side')){
 				filterFunc = ({x,y}, N)=> x < N/2 && y > Math.round(N/2)
 			} /*top-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('front side') ){
-				filterFunc = ({x,y}, N)=> x > Math.round(N/2) && y < N/2
+				if(sortedBalanceReport[0].heavierSide == 'front side'){
+					filterFunc = ({x,y}, N)=> x > N/2 && y < N/2				 	
+				}
 			} /*bottom-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('back side') ){
 				filterFunc = ({x,y}, N)=>  x > Math.round(N/2) && y > Math.round(N/2)
 			} else if(heavySides.includes('left side')){
