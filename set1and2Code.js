@@ -1,7 +1,7 @@
 const fs = require('fs'),
     path = require('path'),
     util = require('util'),
-    testCasesFilePath = path.join(__dirname, 'task-2.txt'),
+    testCasesFilePath = path.join(__dirname, 'task-1.txt'),
     resultsFilePath = path.join(__dirname, 'results.txt');
 
 inspect = (note, elem) => {
@@ -33,37 +33,41 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 0; i<3; i++) {
+	for (let i = 0; i<configs.length; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
 
 
 calculateMaxHunters=(testCaseNumber, config)=>{
-	console.log(`ran calculateMaxHunters for testCaseNumber ${testCaseNumber}`);
+	// console.log(`ran calculateMaxHunters for testCaseNumber ${testCaseNumber}`);
 	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
 	grid = fillAllEmptySpaces(grid);
 
-	inspect('the grid after all wholes have been filled:', grid)
+	// inspect('the grid after all wholes have been filled:', grid)
 
 	let weightPerSide = calculateWeightPerSide(grid, N);
 	let balanceReport = generateBalanceReport(weightPerSide);
-	inspect('the balanceReport:', balanceReport);
+	// inspect('the balanceReport:', balanceReport);
 
 	grid = removeLoad(grid, balanceReport, N);
-	inspect('the grid after uneven load has been removed:', grid)
+	// inspect('the grid after uneven load has been removed:', grid)
 
-	//After we remove the load, lets check the balance again:
-	weightPerSide = calculateWeightPerSide(grid, N);
-	balanceReport = generateBalanceReport(weightPerSide);
-	inspect(`balanceReport for testCaseNumber# ${testCaseNumber}:`, balanceReport);	
-	if(balanceReport[0] && balanceReport[0].byHowMany){
-		 logResults(-1, testCaseNumber);
-	} else{
-		logResults(grid, testCaseNumber);		
+	//For odd N's, after we remove the load, lets check the balance again:
+	if(N%2 != 0){
+		weightPerSide = calculateWeightPerSide(grid, N);
+		balanceReport = generateBalanceReport(weightPerSide);
+		// inspect(`balanceReport for testCaseNumber# ${testCaseNumber}:`, balanceReport);	
+		if(balanceReport[0] && balanceReport[0].byHowMany){
+			 logResults(-1, testCaseNumber);
+			 return;
+		}	
 	}
+
+	logResults(grid, testCaseNumber);		
+	
 }
 
 createEmptyGrid=(N)=>{
@@ -200,8 +204,8 @@ const removeLoad = (grid, balanceReport, N) => {
 		if(numToRemove > removableHunters){
 			return -1
 		}
-		console.log('numToRemove: ', numToRemove);
-		console.log('removableHunters: ', removableHunters);		
+		// console.log('numToRemove: ', numToRemove);
+		// console.log('removableHunters: ', removableHunters);		
 
 		let filterFunc;
 		let heavySides = balanceReport.map(a => a.heavierSide);
