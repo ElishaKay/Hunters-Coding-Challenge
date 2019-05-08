@@ -33,13 +33,13 @@ parseInput=(string)=>{
 		B = data[i][1];
 		H = data[i][2];
 		let end = i+Number(B)+Number(H)+1;
-		let coordinates = data.slice(i, end);
+		let coordinates = data.slice(i+1, end);
 		configs.push({N, B, H, coordinates});
 		i=end;
 		console.log('i=', i)	
 	}
 
-	console.log('configs',configs)
+	inspect('configs',configs)
 	console.log('configs.length: ',configs.length)
 	// inspect('configs:', configs)
 
