@@ -55,7 +55,15 @@ calculateMaxHunters=(testCaseNumber, config)=>{
 	grid = removeLoad(grid, balanceReport, N);
 	inspect('the grid after uneven load has been removed:', grid)
 
-	logResults(grid, testCaseNumber);
+	//After we remove the load, lets check the balance again:
+	weightPerSide = calculateWeightPerSide(grid, N);
+	balanceReport = generateBalanceReport(weightPerSide);
+	inspect(`balanceReport for testCaseNumber# ${testCaseNumber}:`, balanceReport);	
+	if(balanceReport[0] && balanceReport[0].byHowMany){
+		 logResults(-1, testCaseNumber);
+	} else{
+		logResults(grid, testCaseNumber);		
+	}
 }
 
 createEmptyGrid=(N)=>{
@@ -185,6 +193,7 @@ const generateBalanceReport = (weightPerSide) => {
 
 const removeLoad = (grid, balanceReport, N) => {
 	if(balanceReport.length>0){
+		//a: should we return -1?
 		var sortedBalanceReport = balanceReport.sort((a, b) => b.byHowMany - a.byHowMany);
 		let numToRemove = sortedBalanceReport[0].byHowMany;
 		let removableHunters = grid.filter((seat)=>!seat.glued).length;
@@ -192,6 +201,7 @@ const removeLoad = (grid, balanceReport, N) => {
 			return -1
 		}
 		console.log('numToRemove: ', numToRemove);
+		console.log('removableHunters: ', removableHunters);		
 
 		let filterFunc;
 		let heavySides = balanceReport.map(a => a.heavierSide);
