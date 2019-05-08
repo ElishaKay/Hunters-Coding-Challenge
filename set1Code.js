@@ -1,12 +1,8 @@
 const fs = require('fs'),
     path = require('path'),
     util = require('util'),
-    testCasesFilePath = path.join(__dirname, 'task-1.txt'),
+    testCasesFilePath = path.join(__dirname, 'task-2.txt'),
     resultsFilePath = path.join(__dirname, 'results.txt');
-
-inspect = (note, elem) => {
-	console.log(note, util.inspect(elem, {showHidden: false, depth: null}))
-}
 
 fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
     if (!err) {
@@ -33,30 +29,19 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 0; i< configs.length; i++) {
+	for (let i = 0; configs.length; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
 
 
 calculateMaxHunters=(testCaseNumber, config)=>{
-	
-	// inspect(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber} where the config is`, config);
 	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
-	// console.log('grid after addDefaultBoxesAndHunters func: ', grid);
-
 	grid = fillAllEmptySpaces(grid);
-	
-	// console.log('grid after fillAllEmptySpaces func: ', grid);
-
 	let weightPerSide = calculateWeightPerSide(grid, N);
-	// console.log('weightPerSide: ',weightPerSide)
-
 	let balanceReport = generateBalanceReport(weightPerSide);
-	// console.log('balanceReport: ',balanceReport)
-
 	grid = removeLoad(grid, balanceReport, N);
 
 	logResults(grid, testCaseNumber);
@@ -80,7 +65,7 @@ addDefaultBoxesAndHunters=(grid, B, H, coordinates)=>{
 	  let x=coordinates[i][0];
 	  let y=coordinates[i][2];
 	  let weight = i < B ? 0 : 1;
-	  coordinates[i] = {x, y, weight, empty: false, glued: true};
+	  coordinates[i] = {x, y, weight, glued: true};
 
 	  //replace the relevant element within the grid:
 	  const seatIndex = grid.findIndex((seat) => seat.x == x && seat.y == y)
@@ -90,20 +75,17 @@ addDefaultBoxesAndHunters=(grid, B, H, coordinates)=>{
 }
 
 
-
 fillAllEmptySpaces=(grid)=>{
 	// map through the grid object
 	// and put hunters in all the empty seats
 	grid = grid.map((seat)=> {
 		if(!seat.glued){
-			seat.empty =  false; 
 		    seat.weight = 1;
 		} 
 		return seat;
 	})
 
 	return grid;
-	inspect('grid after empty seats have been taken by hunters:',grid);
 }
 
 
@@ -115,31 +97,35 @@ const calculateWeightPerSide = (grid, N) => {
 	frontSideWeight = 0;
 	backSideWeight = 0;
 	// calculate the weight balance
-	for (let i = 0; i < grid.length; i++) { 
-		let {weight, x, y} = grid[i]; 
-		if(weight > 0){
-		  //which quadrant does it belong to?
-		  //top-left quadrant
-		  if(x <= N/2 && y <= N/2){
-			leftSideWeight++;
-			frontSideWeight++;	  	
-		  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
-		  	leftSideWeight++;
-		  	backSideWeight++;
-		  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
-		  	rightSideWeight++;
-		  	frontSideWeight++;	
-		  } else /*bottom-right quadrant*/ {
-		    rightSideWeight++;
-		  	backSideWeight++;
-		  }
-		}
-	}
 	
-	// console.log('leftSideWeight: ',leftSideWeight);
-	// console.log('rightSideWeight: ',rightSideWeight);
-	// console.log('frontSideWeight: ',frontSideWeight);
-	// console.log('backSideWeight: ',backSideWeight);
+		for (let i = 0; i < grid.length; i++) { 
+			let {weight, x, y} = grid[i]; 
+			if(weight > 0){
+			  //which quadrant does it belong to?
+			  if (N%2 == 0){
+			  	  //top-left quadrant
+				  if(x <= N/2 && y <= N/2){
+					leftSideWeight++;
+					frontSideWeight++;	  	
+				  } /*bottom-left quadrant*/ else if(x <= N/2 && y > N/2){
+				  	leftSideWeight++;
+				  	backSideWeight++;
+				  } /*top-right quadrant*/ else if(x > N/2 && y <= N/2){
+				  	rightSideWeight++;
+				  	frontSideWeight++;	
+				  } else /*bottom-right quadrant*/ {
+				    rightSideWeight++;
+				  	backSideWeight++;
+				  }	
+			  } /* else if N is an odd number */else{
+			  	
+			  }
+
+			  
+			}
+		}
+     
+	
 	weightPerSide = {leftSideWeight, rightSideWeight, frontSideWeight, backSideWeight};
 	return weightPerSide;
 }
@@ -176,11 +162,8 @@ const removeLoad = (grid, balanceReport, N) => {
 		}
 
 		let filterFunc;
-
 		let heavySides = balanceReport.map(a => a.heavierSide);
-		// console.log('heavySides', heavySides);
-		// console.log('balanceReport in removeLoad func',balanceReport)
-	
+
 		/*top-left quadrant*/
 		if(heavySides.includes('left side') && heavySides.includes('front side')) {
 			filterFunc = ({x,y}, N)=> x <= N/2 && y <= N/2  	
@@ -204,12 +187,10 @@ const removeLoad = (grid, balanceReport, N) => {
 		    const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
 			
 			if(typeof grid[seatIndex] != 'undefined') {
-				// console.log('ran hunter removal process on: ', grid[seatIndex]);
-				grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, empty: true, weight: 0}
+				grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, weight: 0}
 			}
 		}
 	}
-	// inspect('grid at the end of removeLoad Function', grid);
 	return grid;
 }
 
@@ -222,13 +203,5 @@ logResults = (grid, testCaseNumber) => {
 		let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
 		console.log(`Case #${testCaseNumber}: ${testResult}`);		
 	}
-
-	// fs.writeFile(resultsFilePath, testResult, function(err) {
-	//     if(err) {
-	//         return console.log(err);
-	//     }
-
-	//     console.log("The file was saved!");
-	// }); 
 }
 
