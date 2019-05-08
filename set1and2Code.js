@@ -4,6 +4,10 @@ const fs = require('fs'),
     testCasesFilePath = path.join(__dirname, 'task-2.txt'),
     resultsFilePath = path.join(__dirname, 'results.txt');
 
+inspect = (note, elem) => {
+	console.log(note, util.inspect(elem, {showHidden: false, depth: null}))
+}
+
 fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
     if (!err) {
         parseInput(data);
@@ -29,20 +33,27 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 0; configs.length; i++) {
+	for (let i = 0; i<3; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
 
 
 calculateMaxHunters=(testCaseNumber, config)=>{
+	console.log(`ran calculateMaxHunters for testCaseNumber ${testCaseNumber}`);
 	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
 	grid = fillAllEmptySpaces(grid);
+
+	inspect('the grid after all wholes have been filled:', grid)
+
 	let weightPerSide = calculateWeightPerSide(grid, N);
 	let balanceReport = generateBalanceReport(weightPerSide);
+	inspect('the balanceReport:', balanceReport);
+
 	grid = removeLoad(grid, balanceReport, N);
+	inspect('the grid after uneven load has been removed:', grid)
 
 	logResults(grid, testCaseNumber);
 }
@@ -101,7 +112,7 @@ const calculateWeightPerSide = (grid, N) => {
 		for (let i = 0; i < grid.length; i++) { 
 			let {weight, x, y} = grid[i]; 
 			if(weight > 0){
-			  	  //which quadrant does it belong to?
+			  	  //is N even or odd
 				  if (N%2 == 0){
 					  	  //top-left quadrant
 						  if(x <= N/2 && y <= N/2){
@@ -122,13 +133,13 @@ const calculateWeightPerSide = (grid, N) => {
 						  if(x < N/2 && y < N/2){
 							leftSideWeight++;
 							frontSideWeight++;	  	
-						  } /*bottom-left quadrant*/ else if(x < N/2 && y > (N/2 + 1) ){
+						  } /*bottom-left quadrant*/ else if(x < N/2 && y > Math.round(N/2) ){
 						  	leftSideWeight++;
 						  	backSideWeight++;
-						  } /*top-right quadrant*/ else if(x > (N/2 + 1) && y < N/2){
+						  } /*top-right quadrant*/ else if(x > Math.round(N/2) && y < N/2){
 						  	rightSideWeight++;
 						  	frontSideWeight++;	
-						  } /*bottom-right quadrant*/ else if(x > (N/2 + 1) && y > (N/2 + 1) ){
+						  } /*bottom-right quadrant*/ else if(x > Math.round(N/2) && y > Math.round(N/2) ){
 						    rightSideWeight++;
 						  	backSideWeight++;
 						  }	 /*just leftSideWeight*/ else if(x < N/2 && y == Math.round(N/2) ){
@@ -146,7 +157,6 @@ const calculateWeightPerSide = (grid, N) => {
 			}
 		}
      
-	
 	weightPerSide = {leftSideWeight, rightSideWeight, frontSideWeight, backSideWeight};
 	return weightPerSide;
 }
@@ -181,36 +191,68 @@ const removeLoad = (grid, balanceReport, N) => {
 		if(numToRemove > removableHunters){
 			return -1
 		}
+		console.log('numToRemove: ', numToRemove);
 
 		let filterFunc;
 		let heavySides = balanceReport.map(a => a.heavierSide);
 
-		/*top-left quadrant*/
-		if(heavySides.includes('left side') && heavySides.includes('front side')) {
-			filterFunc = ({x,y}, N)=> x <= N/2 && y <= N/2  	
-		} /*bottom-left quadrant*/ else if(heavySides.includes('left side') && heavySides.includes('back side')){
-			filterFunc = ({x,y}, N)=> x <= N/2 && y > N/2
-		} /*top-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('front side') ){
-			filterFunc = ({x,y}, N)=> x > N/2 && y <= N/2
-		} /*bottom-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('back side') ){
-			filterFunc = ({x,y}, N)=>  x > N/2 && y > N/2
-		} else if(heavySides.includes('left side')){
-			filterFunc = ({x,y}, N)=> x <= N/2
-		} else if(heavySides.includes('right side')){
-			filterFunc = ({x,y}, N)=> x > N/2
-		} else if(heavySides.includes('front side')){
-			filterFunc = ({x,y}, N)=> y <= N/2
-		} else if(heavySides.includes('back side')){
-			filterFunc = ({x,y}, N)=> y > N/2
+		if (N%2 == 0){
+			/*top-left quadrant*/
+			if(heavySides.includes('left side') && heavySides.includes('front side')) {
+				filterFunc = ({x,y}, N)=> x <= N/2 && y <= N/2  	
+			} /*bottom-left quadrant*/ else if(heavySides.includes('left side') && heavySides.includes('back side')){
+				filterFunc = ({x,y}, N)=> x <= N/2 && y > N/2
+			} /*top-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('front side') ){
+				filterFunc = ({x,y}, N)=> x > N/2 && y <= N/2
+			} /*bottom-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('back side') ){
+				filterFunc = ({x,y}, N)=>  x > N/2 && y > N/2
+			} else if(heavySides.includes('left side')){
+				filterFunc = ({x,y}, N)=> x <= N/2
+			} else if(heavySides.includes('right side')){
+				filterFunc = ({x,y}, N)=> x > N/2
+			} else if(heavySides.includes('front side')){
+				filterFunc = ({x,y}, N)=> y <= N/2
+			} else if(heavySides.includes('back side')){
+				filterFunc = ({x,y}, N)=> y > N/2
+			}
+
+			for (let i = 0; i <= numToRemove; i++) {
+			    const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
+				
+				if(typeof grid[seatIndex] != 'undefined') {
+					grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, weight: 0}
+				}
+			}
+		} /* else if N is an odd number */else{
+			/*top-left quadrant*/
+			if(heavySides.includes('left side') && heavySides.includes('front side')) {
+				filterFunc = ({x,y}, N)=> x < N/2 && y < N/2 	
+			} /*bottom-left quadrant*/ else if(heavySides.includes('left side') && heavySides.includes('back side')){
+				filterFunc = ({x,y}, N)=> x < N/2 && y > Math.round(N/2)
+			} /*top-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('front side') ){
+				filterFunc = ({x,y}, N)=> x > Math.round(N/2) && y < N/2
+			} /*bottom-right quadrant*/ else if(heavySides.includes('right side') && heavySides.includes('back side') ){
+				filterFunc = ({x,y}, N)=>  x > Math.round(N/2) && y > Math.round(N/2)
+			} else if(heavySides.includes('left side')){
+				filterFunc = ({x,y}, N)=> x < N/2 && y == Math.round(N/2)
+			} else if(heavySides.includes('right side')){
+				filterFunc = ({x,y}, N)=> x > Math.round(N/2) && y == Math.round(N/2)
+			} else if(heavySides.includes('front side')){
+				filterFunc = ({x,y}, N)=> x == Math.round(N/2) && y < N/2
+			} else if(heavySides.includes('back side')){
+				filterFunc = ({x,y}, N)=> x == Math.round(N/2) && y > Math.round(N/2)
+			}	
+
+			for (let i = 0; i <= numToRemove; i++) {
+			    const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
+				
+				if(typeof grid[seatIndex] != 'undefined') {
+					grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, weight: 0}
+				}
+			}
+
 		}
 
-		for (let i = 0; i <= numToRemove; i++) {
-		    const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
-			
-			if(typeof grid[seatIndex] != 'undefined') {
-				grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, weight: 0}
-			}
-		}
 	}
 	return grid;
 }
