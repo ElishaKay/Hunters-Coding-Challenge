@@ -8,48 +8,45 @@ inspect = (note, elem) => {
 	console.log(note, util.inspect(elem, {showHidden: false, depth: null}))
 }
 
+let numOfTestCases = 0;
+let N = ''
+let B = ''
+let H = ''
+let data = [];
 
 
 let leftSideWeight = 0;
 let rightSideWeight = 0;
 let frontSideWeight = 0;
 let backSideWeight = 0;
+let testCases = [];
 let balanceStatus = [];
 
 fs.readFile(testCasesFilePath, {encoding: 'utf-8'}, function(err,data){
     if (!err) {
-        console.log('received data: ' + data);
-        
+        parseInput(data);
     } else {
         console.log(err);
     }
 });
 
 
+parseInput=(string)=>{
+	let arr = string.split("\n");
+	let numOfTestCases = arr.slice(0,1);
 
-let string = `4 4 4
-1 1
-2 1
-3 1
-4 1
-1 4
-2 4
-3 4
-4 4`
+	// let config = 'NBH'
 
-let arr = string.split("\n");
+	// inspect('arr:', arr)
+	inspect('numOfTestCases:', numOfTestCases)
+	data = arr.slice(1);
 
-let config = arr.slice(0,1);
+	inspect('data:', data)
 
-inspect('arr:', arr)
-inspect('config:', config)
-data = arr.slice(1);
-
-inspect('data:', data)
-
-let N = config[0][0];
-let B = config[0][2];
-let H = config[0][4];
+	N = config[0][0];
+	B = config[0][2];
+	H = config[0][4];
+}
 
 
 
@@ -126,7 +123,6 @@ weightCalc();
 const searchForImbalance = () => {
 	let leftRightBalance = leftSideWeight - rightSideWeight;
 	let frontBackBalance = frontSideWeight - backSideWeight;
-	let status = [];
 
 	//check left right-balance
 	if(leftRightBalance != 0){
@@ -139,10 +135,9 @@ const searchForImbalance = () => {
 					 byHowMany: Math.abs(frontBackBalance)});
 	}
 
-	return status;
-}
 
-balanceStatus = searchForImbalance();
+	removeLoad(balanceStatus.heavierSide);
+}
 
 console.log('balanceStatus: ',balanceStatus)
 
@@ -174,7 +169,6 @@ updateRelevantSeats = (seat, section) => {
 }
 
 
-removeLoad(balanceStatus[0].heavierSide);
 
 logResults = (grid) => {
 	let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
