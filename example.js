@@ -33,14 +33,15 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 0; i< 20; i++) {
+	for (let i = 0; i< configs.length; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
 
 
 calculateMaxHunters=(testCaseNumber, config)=>{
-	// console.log(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber}`)
+	
+	// inspect(`ran calculateMaxHunters() func with testCaseNumber ${testCaseNumber} where the config is`, config);
 	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
