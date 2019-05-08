@@ -33,7 +33,7 @@ parseInput=(string)=>{
 		i=end;
 	}
 
-	for (let i = 115; i< configs.length; i++) {
+	for (let i = 0; i< configs.length; i++) {
 		calculateMaxHunters(i+1, configs[i]);
 	}
 }
@@ -67,7 +67,7 @@ createEmptyGrid=(N)=>{
 	let grid = [];
 	for (let x = 1; x <= N; x++) { 
 		for (let y = 1; y <= N; y++) { 
-	 		grid.push({x, y, weight:0, empty: true, glued: false});
+	 		grid.push({x, y, empty: true, glued: false});
 		}
 	}
 	return grid;
