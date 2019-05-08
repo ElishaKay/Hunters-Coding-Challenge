@@ -33,12 +33,14 @@ parseInput=(string)=>{
 
 	for (let i = 0; i<configs.length; i++) {
 		let {N,B,H} = configs[i];
-		calculateMaxHunters(N,B,H);
+		calculateMaxHunters(i+1, N,B,H);
 	}
 }
 
 
-calculateMaxHunters=(N,B,H)=>{
+calculateMaxHunters=(testCaseNumber, N,B,H)=>{
+	console.log(`ran calculateMaxHunters func testResult for ${testCaseNumber} where N,B,H = ${N} ${B} ${H}`);
+
 	let grid = createEmptyGrid(N);
 	grid = addDefaultBoxesAndHunters(grid, B, H);
 	grid = fillAllEmptySpaces(grid);
@@ -46,7 +48,7 @@ calculateMaxHunters=(N,B,H)=>{
 	let balanceReport = generateBalanceReport(weightPerSide);
 
 	grid = removeLoad(grid, balanceReport, N);
-	logResults(grid);
+	logResults(grid, testCaseNumber);
 }
 
 createEmptyGrid=(N)=>{
@@ -182,9 +184,9 @@ updateRelevantSeats = ({x,y}, section, N) => {
 
 
 
-logResults = (grid) => {
+logResults = (grid, testCaseNumber) => {
 	let testResult = grid.filter((seat)=>!seat.glued && seat.weight>0).length;
-	console.log('testResult: ',testResult);
+	console.log(`testResult for ${testCaseNumber}: `,testResult);
 	// fs.writeFile(resultsFilePath, testResult, function(err) {
 	//     if(err) {
 	//         return console.log(err);
