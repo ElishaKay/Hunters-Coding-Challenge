@@ -34,17 +34,15 @@ parseInput=(string)=>{
 	}
 
 	for (let i = 0; i<1; i++) {
-		let {N,B,H} = configs[i];
-		calculateMaxHunters(i+1, N,B,H);
+		calculateMaxHunters(i+1, configs[i]);
 	}
 }
 
 
-calculateMaxHunters=(testCaseNumber, N,B,H)=>{
-	console.log(`ran calculateMaxHunters func testResult for ${testCaseNumber} where N,B,H = ${N} ${B} ${H}`);
-
+calculateMaxHunters=(testCaseNumber, config)=>{
+	let {N,B,H,coordinates} = config;
 	let grid = createEmptyGrid(N);
-	grid = addDefaultBoxesAndHunters(grid, B, H);
+	grid = addDefaultBoxesAndHunters(grid, B, H, coordinates);
 	
 	console.log('grid: ', grid);
 	grid = fillAllEmptySpaces(grid);
@@ -69,17 +67,17 @@ createEmptyGrid=(N)=>{
 }
 
 
-addDefaultBoxesAndHunters=(grid, B, H)=>{
+addDefaultBoxesAndHunters=(grid, B, H, coordinates)=>{
 	//edit the previously created template grid - include the Boxes and Hunters of the given test case
-	for (let i = 0; i < data.length; i++) { 
-	  let x=data[i][0];
-	  let y=data[i][2];
+	for (let i = 0; i < coordinates.length; i++) { 
+	  let x=coordinates[i][0];
+	  let y=coordinates[i][2];
 	  let weight = i < B ? 0 : 1;
-	  data[i] = {x, y, weight, empty: false, glued: true};
+	  coordinates[i] = {x, y, weight, empty: false, glued: true};
 
 	  //replace the relevant element within the grid:
 	  const seatIndex = grid.findIndex((seat) => seat.x == x && seat.y == y)
-	  grid[seatIndex] = data[i];
+	  grid[seatIndex] = coordinates[i];
 	}
 	return grid;
 }
