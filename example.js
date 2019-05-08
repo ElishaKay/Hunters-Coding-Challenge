@@ -48,13 +48,13 @@ calculateMaxHunters=(testCaseNumber, config)=>{
 
 	grid = fillAllEmptySpaces(grid);
 	
-	console.log('grid after fillAllEmptySpaces func: ', grid);
+	// console.log('grid after fillAllEmptySpaces func: ', grid);
 
 	let weightPerSide = calculateWeightPerSide(grid, N);
-	console.log('weightPerSide: ',weightPerSide)
+	// console.log('weightPerSide: ',weightPerSide)
 
 	let balanceReport = generateBalanceReport(weightPerSide);
-	console.log('balanceReport: ',balanceReport)
+	// console.log('balanceReport: ',balanceReport)
 
 	grid = removeLoad(grid, balanceReport, N);
 	
@@ -193,34 +193,24 @@ const removeLoad = (grid, balanceReport, N) => {
 			filterFunc = ({x,y}, N)=> y > N/2
 		}
 
-		for (let i = 0; i < balanceReport[0].byHowMany;) {
-			const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
-				// console.log('ran hunter removal process on: ', grid[seatIndex]);
-				
-				if(seatIndex){
-					grid[seatIndex] = {...grid[seatIndex], empty: true, weight: 0}
-					i++;
-				}
+		let numToRemove = balanceReport.reduce(function(prev, cur) {
+		  return prev + cur.byHowMany;
+		}, 0);
+
+		console.log('numToRemove: ',numToRemove)
+
+		for (let i = 0; i <= numToRemove; i++) {
+		    const seatIndex = grid.findIndex((seat) => !seat.glued && filterFunc(seat, N) && seat.weight > 0);
+			
+
+			if(typeof grid[seatIndex] != 'undefined') {
+				console.log('ran hunter removal process on: ', grid[seatIndex]);
+				grid[seatIndex] = {x: grid[seatIndex].x, y: grid[seatIndex].y, glued: false, empty: true, weight: 0}
+			}
 		}
 	}
-
+	inspect('grid at the end of removeLoad Function', grid);
 	return grid;
-}
-
-updateRelevantSeats = (seat, section, N) => {
-	
-	console.log(`ran updateRelevantSeats func with params seat: ${seat}  section: ${section}  N: ${N}`)	 
-
-
-	// if(section==='left side'){
-	// 	return seat.x <= N/2
-	// } else if(section==='right side'){
-	// 	return seat.x > N/2
-	// } else if(section==='front side'){
-	// 	return seat.y <= N/2
-	// } else if(section==='back side'){
-	// 	return seat.y > N/2
-	// }
 }
 
 
