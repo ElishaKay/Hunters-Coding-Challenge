@@ -61,7 +61,6 @@ Submissions
 
 Once you completed writing the code that solves the problem run it on the relevant set of test cases and generate the output file. Submit your code, output file (or files) and any additionally required documentation using this form.
 
-For any questions please contact us at Jobs_IL@intuit.com.
 
 Example #1
  
