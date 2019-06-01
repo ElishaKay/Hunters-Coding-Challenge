@@ -82,7 +82,7 @@ Explanation
  
 There is 1 test case. The size of the magic carpet is 4*4 and there are already 4 boxes and 4 treasure hunters:
  
-<img="test_case_1.png">
+<img src="test_case_1.png">
  
 The left and right halves of the magic carpet are balanced, each holding 2 bags and 2 hunters:
  
@@ -94,7 +94,7 @@ But the front and back halves are not, with one holding 4 bags and the other 4 h
  
 We solve this test case by adding 4 treasure hunters:
 
-<img="test_case_1b.png">
+<img src="test_case_1b.png">
 
 
  
@@ -134,7 +134,7 @@ For the first case the size of the magic carpet is 3*3, there are already 1 box 
 For the second case the size of the magic carpet is 3*3, there are already 2 boxes and 0 treasure hunters and we can add 5 more.
 For the third case the size of the magic carpet is 3*3, there are already 3 boxes and 3 treasure hunters and this carpet can’t be balanced.
 
-<img="test_case_2.png">
+<img src="test_case_2.png">
  
  
 Output
