@@ -94,7 +94,7 @@ But the front and back halves are not, with one holding 4 bags and the other 4 h
  
 We solve this test case by adding 4 treasure hunters:
 
-<img src="test_case_1b.png">
+<img src="test_case_1_b.png">
 
 
  
